@@ -3,15 +3,16 @@ import java.util.Scanner;
 public class MiniATM {
 
     static double balance = 1000.00;
+
+
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        System.out.println("=========================================");
+        System.out.println("====================");
         System.out.println(" WELCOME TO THE MINI ATM");
-        System.out.println("=========================================");
+        System.out.println("====================");
 
         boolean running = true;
-
         while (running) {
             printMenu();
             String choice = input.nextLine().trim();
@@ -31,6 +32,7 @@ public class MiniATM {
                     System.out.println("\nThank you for using the Mini ATM. Goodbye!");
                     break;
                 default:
+                    // A friendly message beats a crash.
                     System.out.println("\n[!] Please choose a number from 1 to 4.\n");
             }
         }
@@ -38,12 +40,109 @@ public class MiniATM {
 
     static void printMenu() {
         System.out.println("Current options:");
-        System.out.println(" [1] Deposit");
-        System.out.println(" [2] Withdraw");
-        System.out.println(" [3] Check balance");
-        System.out.println(" [4] Exit");
+        System.out.println("  [1] Deposit");
+        System.out.println("  [2] Withdraw");
+        System.out.println("  [3] Check balance");
+        System.out.println("  [4] Exit");
         System.out.print("Enter your choice: ");
     }
 
-    // You'll add deposit(), withdraw(), and checkBalance() below.
+    //
+    // DEPOSIT
+    //
+    static void deposit() {
+        System.out.print("Enter amount to deposit: ");
+        String line = input.nextLine().trim();
+
+        try {
+            double amount = Double.parseDouble(line);
+
+            // Task 3: Check if amount is positive
+            if (amount <= 0) {
+                throw new InvalidAmountException("Deposit amount must be greater than zero.");
+            }
+
+            balance += amount;
+            System.out.printf("Deposited PHP %.2f. New balance: PHP %.2f%n", amount, balance);
+
+        } catch (NumberFormatException e) {
+            // Task 2: Handle invalid numeric input
+            System.out.println("[!] Please enter a valid number.");
+        } catch (InvalidAmountException e) {
+            // Task 3: Handle invalid amount
+            System.out.println("[!] " + e.getMessage());
+        } finally {
+            // Task 4: Finally block that always executes
+            System.out.println("-- transaction finished --\n");
+        }
+    }
+
+
+    static void withdraw() {
+        System.out.print("Enter amount to withdraw: ");
+        String line = input.nextLine().trim();
+
+        try {
+            double amount = Double.parseDouble(line);
+
+
+            if (amount <= 0) {
+                throw new InvalidAmountException("Withdrawal amount must be greater than zero.");
+            }
+
+
+            if (amount > balance) {
+                double shortfall = amount - balance;
+                throw new InsufficientFundsException(
+                        String.format("Insufficient funds. You are short by PHP %.2f.", shortfall),
+                        shortfall
+                );
+            }
+
+            balance -= amount;
+            System.out.printf("Withdrew PHP %.2f. New balance: PHP %.2f%n", amount, balance);
+
+        } catch (NumberFormatException e) {
+
+            System.out.println("[!] Please enter a valid number.");
+        } catch (InvalidAmountException | InsufficientFundsException e) {
+
+            System.out.println("[!] " + e.getMessage());
+        } finally {
+
+            System.out.println("-- transaction finished --\n");
+        }
+    }
+
+
+    static void checkBalance() {
+        System.out.printf("%nYour current balance is: PHP %.2f%n%n", balance);
+    }
+}
+
+
+
+
+class InsufficientFundsException extends Exception {
+    private double shortfall;
+
+    public InsufficientFundsException(String message) {
+        super(message);
+    }
+
+    public InsufficientFundsException(String message, double shortfall) {
+        super(message);
+        this.shortfall = shortfall;
+    }
+
+    public double getShortfall() {
+        return shortfall;
+    }
+}
+
+
+class InvalidAmountException extends Exception {
+    public InvalidAmountException(String message) {
+        super(message);
+    }
 }

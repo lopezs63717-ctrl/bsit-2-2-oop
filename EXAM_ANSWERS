@@ -1,0 +1,16 @@
+# LICEO RIDE - Semi-Final Laboratory Exam Answers
+
+Name: SPENCER LOPEZ
+Section: Your Section
+
+## Question 1
+Why is the list in RideManager typed ArrayList<Ride> and not ArrayList<Jeepney>?
+
+Your answer:
+Using ArrayList<Ride> leverages polymorphism, allowing the list to store any subclass object derived from Ride (such as Jeepney, Tricycle, or Taxi) rather than being restricted to Jeepney instances. This enables flexible management of all vehicle types inside a single uniform collection without duplicating code.
+
+## Question 2
+In showStudentDiscounts(), why must you check instanceof before the cast?
+
+Your answer:
+Checking with instanceof ensures that the Ride object actually implements the StudentDiscount interface before attempting a downcast. It performs dynamic type checking to prevent non-eligible vehicle types (like Taxi) from triggering a ClassCastException at runtime.

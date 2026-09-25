@@ -1,4 +1,46 @@
 package semifinal;
 
-public class Ride {
+public abstract class Ride {
+
+
+    private static int nextId = 1;
+    private final int id;
+    private final String passenger;
+    private final double km;
+
+    public Ride(String passenger, double km) {
+        this.id = nextId++;
+        this.passenger = passenger;
+        this.km = km;
+    }
+
+
+    public int getId()           { return id; }
+    public String getPassenger() { return passenger; }
+    public double getKm()        { return km; }
+
+    // TODO 2 (10 pts): Declare TWO abstract methods (no body):
+    //   a) fare()    - returns a double
+    //   b) vehicle() - returns a String
+    public abstract double fare();
+    public abstract String vehicle();
+
+
+    public void printTicket() {
+        System.out.println("--------------------------------");
+        System.out.println("  Ticket #" + id + "  |  " + vehicle());
+        System.out.println("  Passenger      : " + passenger);
+        System.out.printf("  Distance       : %.1f km%n", km);
+        System.out.printf("  Fare           : PHP %.2f%n", fare());
+    }
+
+    // TODO 3 (10 pts): OVERLOAD printTicket.
+    //   Write a second method named printTicket that takes ONE
+    //   parameter: String note. Inside it:
+    //     1. call printTicket();   (the version above)
+    //     2. print "  Note           : " + note
+    public void printTicket(String note) {
+        printTicket();
+        System.out.println("  Note           : " + note);
+    }
 }
